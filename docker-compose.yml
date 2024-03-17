@@ -1,5 +1,5 @@
 version: "3"
-name: simple-app
+name: movies-app
 services:    
     mygo:
         container_name: go_server
@@ -10,6 +10,8 @@ services:
             - 8080:8080
         environment:
             - DB_CONN_STRING=host=mypostgres port=5432 user=postgres password=admin dbname=postgres sslmode=disable
+        depends_on:
+            - mypostgres
     mypostgres:
         container_name: postgres
         image: postgres:alpine

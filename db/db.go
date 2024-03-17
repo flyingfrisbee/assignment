@@ -4,6 +4,7 @@ import (
 	"assessment/db/model"
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,12 +16,16 @@ var (
 
 func StartDBConnection() {
 	var err error
-	Conn, err = gorm.Open(
-		postgres.Open(os.Getenv("DB_CONN_STRING")),
-		&gorm.Config{SkipDefaultTransaction: true},
-	)
-	if err != nil {
-		log.Fatal(err)
+	for {
+		Conn, err = gorm.Open(
+			postgres.Open(os.Getenv("DB_CONN_STRING")),
+			&gorm.Config{SkipDefaultTransaction: true},
+		)
+		if err != nil {
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		break
 	}
 
 	err = initTables()
