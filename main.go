@@ -1,6 +1,7 @@
 package main
 
 import (
+	"assessment/db"
 	"log"
 	"os"
 	"time"
@@ -23,4 +24,8 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+
+	// Connect DB
+	db.StartDBConnection()
+	defer db.CloseDBConnection()
 }
