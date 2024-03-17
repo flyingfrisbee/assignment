@@ -1,0 +1,19 @@
+version: "3"
+name: simple-app
+services:    
+    mygo:
+        container_name: go_server
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8080
+        environment:
+            - DB_CONN_STRING=host=mypostgres port=5432 user=postgres password=admin dbname=postgres sslmode=disable
+    mypostgres:
+        container_name: postgres
+        image: postgres:alpine
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_PASSWORD=admin
