@@ -1,6 +1,7 @@
 package main
 
 import (
+	"assessment/api"
 	"assessment/db"
 	"log"
 	"os"
@@ -28,4 +29,7 @@ func main() {
 	// Connect DB
 	db.StartDBConnection()
 	defer db.CloseDBConnection()
+
+	// Start API
+	api.RunAPI()
 }
