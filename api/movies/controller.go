@@ -163,14 +163,22 @@ func deleteMovieHandler(c *gin.Context) {
 		return
 	}
 
+	var rowsAffected int64
 	err = db.Conn.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Unscoped().Delete(&model.Movie{}, movieID).Error; err != nil {
-			return err
+		tx = tx.Unscoped().Delete(&model.Movie{}, movieID)
+		if tx.Error != nil {
+			return tx.Error
 		}
+		rowsAffected = tx.RowsAffected
 		return nil
 	})
 	if err != nil {
 		common.WriteResp(c, nil, "failed deleting movie", http.StatusInternalServerError)
+		return
+	}
+
+	if rowsAffected == 0 {
+		common.WriteResp(c, nil, "movie doesn't exist", http.StatusNotFound)
 		return
 	}
 
